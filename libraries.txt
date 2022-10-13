@@ -1,0 +1,9 @@
+alembic
+fastapi
+uvicorn[standard]
+passlib
+psycopg2
+python-dotenv
+python-jose
+python-multipart
+sqlalchemy
