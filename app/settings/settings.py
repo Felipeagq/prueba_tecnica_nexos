@@ -1,4 +1,5 @@
 import os
+from re import S
 from dotenv import load_dotenv
 from pydantic import BaseSettings
 
@@ -19,7 +20,9 @@ class Settings(BaseSettings):
     
     # POSTGRES DATABASE URL CONSTRUCTION
     SQLALCHEMY_DATABASE_URL: str = f"postgresql://{_PG_USER}:{_PG_PASSWORD}@{_PG_HOST}:{_PG_PORT}"
-
+    
+    # Storage Path to save file temporary
+    STORAGE_PATH = os.path.join(os.getcwd(),"app","storage")
 
 
 settings = Settings()

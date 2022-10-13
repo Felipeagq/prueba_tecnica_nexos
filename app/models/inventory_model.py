@@ -1,11 +1,11 @@
-from sqlalchemy import Column,Integer,Float,Date
+from sqlalchemy import Column,Integer,Float,Date,String,Text
 from app.db.postgres.pg_core import Base
 from sqlalchemy.orm import relationship
 
 class InventoryModel(Base):
     __tablename__ = "inventory"
-    id = Column(Integer, primary_key=True, index=True)
-    FechaInventario = Column(Date)
+    id = Column(Integer, primary_key=True,index=True)
+    FechaInventario = Column(Text)
     GLN_Cliente = Column(Integer)
     GLN_sucursal = Column(Integer)
     Gtin_Producto = Column(Integer)
