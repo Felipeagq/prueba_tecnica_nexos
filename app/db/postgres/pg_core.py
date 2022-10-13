@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import as_declarative, declared_attr
+from sqlalchemy.ext.declarative import as_declarative, declared_attr, declarative_base
 
 from app.settings.settings import settings
 from typing import Any
@@ -22,12 +22,13 @@ def get_db():
     finally:
         db.close()
 
+Base = declarative_base()
 
-@as_declarative()
-class Base:
-    id:Any
-    __name__:str
+# @as_declarative()
+# class Base:
+#     id: Any
+#     __name__: str
     
-    @declared_attr
-    def __tablename__(cls)->str:
-        return cls.__tablename__.lower()
+#     @declared_attr
+#     def __tablename__(cls) -> str:
+#         return cls.__tablename__.lower()
