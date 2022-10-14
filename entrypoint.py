@@ -24,12 +24,12 @@ async def hello_world_check():
 
 
 # Routes
-
 app.include_router(
     file_router,
     prefix="/file",
     tags=["Files"]
 )
+
 
 if __name__ == "__main__":
     uvicorn.run(
