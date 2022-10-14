@@ -36,11 +36,12 @@ async def upload_file(
         # Process File
         df = pd.read_csv(file_path)
         print(df)
-        df.to_sql(
-            'inventory2', 
-            engine,
+        df.to_sql(  
+            'inventory', 
+            engine, 
             index=False, # Not copying over the index,
-            if_exists="append"
+            index_label="id",
+            if_exists="append",
         )
         
         return JSONResponse(
