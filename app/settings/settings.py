@@ -1,5 +1,4 @@
 import os
-from re import S
 from dotenv import load_dotenv
 from pydantic import BaseSettings
 
@@ -23,6 +22,10 @@ class Settings(BaseSettings):
     
     # Storage Path to save file temporary
     STORAGE_PATH = os.path.join(os.getcwd(),"app","storage")
+    
+    # AWS CREDENTIALS
+    ACCESS_KEY_ID = os.getenv("ACCESS_KEY_ID") or None
+    SECRET_ACCESS_KEY = os.getenv("SECRET_ACCESS_KEY") or None
 
 
 settings = Settings()

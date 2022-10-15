@@ -1,3 +1,4 @@
+from ast import Invert
 from fastapi import APIRouter, UploadFile,File
 from fastapi.responses import JSONResponse
 
@@ -6,6 +7,9 @@ import pandas as pd
 
 from app.settings.settings import settings
 from app.db.postgres.pg_core import engine
+from app.services import update_sql
+from app.services.aws_service import cliente_aws,upload_to_s3
+from app.models.inventory_model import InventoryModel
 
 router = APIRouter()
 
@@ -28,20 +32,34 @@ async def upload_file(
         print(file_path)
         content = await file.read()
         
+        # Create aws_client
+        aws_client = cliente_aws(
+            settings.ACCESS_KEY_ID,
+            settings.SECRET_ACCESS_KEY,
+            "s3"
+        )
+        print(aws_client)
+        
+        # Upload file to s3
+        response = upload_to_s3(
+            aws_client=aws_client,
+            file_data=content,
+            bucket_name="testing-files-felipe",
+            file_name=f"nexos/inventario/{file.filename}"
+        )
+        print(response)
+        
         # Save File
         with open(file_path,"wb") as file:
             file.write(content)
             file.close()
 
         # Process File
-        df = pd.read_csv(file_path)
-        print(df)
-        df.to_sql(  
-            'inventory', 
-            engine, 
-            index=False, # Not copying over the index,
-            index_label="id",
-            if_exists="append",
+        df = update_sql.load_csv(file_path)
+        state = update_sql.load_to_sql(
+            df=df,
+            table_name= InventoryModel.__tablename__,
+            motor=engine
         )
         
         return JSONResponse(
@@ -49,7 +67,7 @@ async def upload_file(
             content={
                 "msg":"File Uploaded",
                 "error":None,
-                "data":f"{content}"
+                "data":f"{state}"
             }
         )
     except Exception as e:

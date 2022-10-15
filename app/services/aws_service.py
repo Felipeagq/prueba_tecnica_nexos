@@ -1,5 +1,6 @@
 from distutils.command.config import config
 import boto3
+from boto3 import client
 from botocore.config import Config
 from botocore.exceptions import ClientError
 
@@ -18,3 +19,18 @@ def cliente_aws(
         aws_secret_access_key=SECRET_ACCESS_KEY
     )
     return aws_client
+
+
+def upload_to_s3(
+    aws_client,
+    file_data,
+    bucket_name,
+    file_name
+):
+    response = aws_client.put_object(
+        # ACL="public-read",
+        Body=file_data,
+        Bucket=bucket_name,
+        Key=file_name
+    )
+    return response
