@@ -3,7 +3,7 @@ from fastapi import APIRouter, UploadFile,File
 from fastapi.responses import JSONResponse
 
 import os
-import pandas as pd
+from datetime import datetime
 
 from app.settings.settings import settings
 from app.db.postgres.pg_core import engine
@@ -39,13 +39,14 @@ async def upload_file(
             "s3"
         )
         print(aws_client)
+        print()
         
         # Upload file to s3
         response = upload_to_s3(
             aws_client=aws_client,
             file_data=content,
             bucket_name="testing-files-felipe",
-            file_name=f"nexos/inventario/{file.filename}"
+            file_name=f"nexos/inventario/{datetime.now()}.csv"
         )
         print(response)
         
